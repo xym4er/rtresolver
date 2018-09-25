@@ -1,9 +1,6 @@
 package com.drweb.rtresolver.domain;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 public class Message {
@@ -13,13 +10,23 @@ public class Message {
 
     private String text;
     private String tag;
+    private String filename;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "user_id")
+    private User author;
 
     public Message() {
     }
 
-    public Message(String text, String tag) {
+    public Message(String text, String tag, User user) {
+        this.author = user;
         this.text = text;
         this.tag = tag;
+    }
+
+    public String getAuthorName() {
+        return author != null ? author.getUsername() : "<none>";
     }
 
     public Integer getId() {
@@ -44,5 +51,21 @@ public class Message {
 
     public void setTag(String tag) {
         this.tag = tag;
+    }
+
+    public User getAuthor() {
+        return author;
+    }
+
+    public String getFilename() {
+        return filename;
+    }
+
+    public void setFilename(String filename) {
+        this.filename = filename;
+    }
+
+    public void setAuthor(User author) {
+        this.author = author;
     }
 }
